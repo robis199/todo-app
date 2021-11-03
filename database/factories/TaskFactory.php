@@ -10,8 +10,8 @@ class TaskFactory extends Factory
     public function definition()
     {
         return [
-           'title',
-           'description',
+           'title'=>$this->faker->text(20),
+           'description'=>$this->faker->text(255),
         ];
     }
 

@@ -48,5 +48,12 @@ class TasksController extends Controller
         return redirect()->route('tasks.index');
     }
 
+    public function complete(Task $task)
+    {
+
+        return redirect()->back(route('tasks.index'));
+    }
+
+
 
 }
