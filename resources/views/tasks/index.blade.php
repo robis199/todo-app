@@ -26,6 +26,10 @@
                                     <form method="post" action="{{route('tasks.destroy', $task)}}">
                                     @csrf
                                     @method('DELETE')
+
+                                    @if(route('tasks.destroy', $task) !== null)
+                                        <del>{{$task->title}}</del>
+                                    @endif
                                     <div>
                                         <div class="flex mb-4 items-center">
                                             <p class="line-through w-full text-white">
@@ -57,6 +61,8 @@
                             </li>
                         </ul>
                     @endforeach
+
+
                 </div>
             </div>
         </div>
