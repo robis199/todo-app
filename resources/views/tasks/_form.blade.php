@@ -9,17 +9,23 @@
                         class="border border-gray-800 focus:border-blue-500 rounded w-full py-2 px-3 mr-4 text-black"
                         placeholder="Add Title"
                         v-model="msg"
-                           value="{{$task->title ?? ""}}"
-                    />
+                           value="{{old("title", $task->title ?? "")}}"
+                    @error('title')
+                    <p>{{$message}}</p>
+                    @enderror
+
                 </label>
+
 
                 <label for="description">
                     <input name="description"
                         class="border border-gray-800 focus:border-blue-500 rounded w-full py-2 px-3 mr-4 text-black"
                         placeholder="Add Description"
-                           value="{{$task->description ?? ""}}"
+                           value="{{old("description", $task->description ?? "")}}"
                         v-model="msg"
-                    />
+                    @error('description')
+                    <p>{{$message}}</p>
+                    @enderror
                 </label>
 
                 <button

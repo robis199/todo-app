@@ -137,8 +137,11 @@ return [
     */
 
     'custom' => [
-        'attribute-name' => [
-            'rule-name' => 'custom-message',
+        'title' => [
+            'required' => 'Without a title, is it even a task?',
+        ],
+        'description' => [
+            'required' => 'Please describe what you need or want to do',
         ],
     ],
 

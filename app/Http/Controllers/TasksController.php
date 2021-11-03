@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\TaskRequest;
 use App\Models\Task;
 use Illuminate\Http\Request;
 
@@ -17,7 +18,7 @@ class TasksController extends Controller
         return view('tasks.create');
     }
 
-    public function store(Request $request): \Illuminate\Http\RedirectResponse
+    public function store(TaskRequest $request): \Illuminate\Http\RedirectResponse
     {
         (new Task([
             'title' => $request->get('title'),
@@ -31,7 +32,7 @@ class TasksController extends Controller
         return view('tasks.edit', ['task' => $task]);
     }
 
-    public function update(Request $request, Task $task): \Illuminate\Http\RedirectResponse
+    public function update(TaskRequest $request, Task $task): \Illuminate\Http\RedirectResponse
     {
         $task->update([
             'title' => $request->get('title'),
