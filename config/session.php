@@ -63,7 +63,7 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Session Database Connection
+    | Session Database TaskRepository
     |--------------------------------------------------------------------------
     |
     | When using the "database" or "redis" session drivers, you may specify a
