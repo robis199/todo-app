@@ -4,13 +4,17 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\TaskRequest;
 use App\Models\Task;
-use Illuminate\Http\Request;
+use Illuminate\Http\RedirectResponse;
 
 class TasksController extends Controller
 {
     public function index()
     {
-        return view('tasks.index', ['task' => Task::all()]);
+        $tasks = Task::where('user_id', auth()->user()->id)
+            ->orderBy('id', 'ASC')
+            ->tasks()
+            ->get();
+        return view('tasks.index', ['tasks' => $tasks]);
     }
 
     public function create()
@@ -18,21 +22,24 @@ class TasksController extends Controller
         return view('tasks.create');
     }
 
-    public function store(TaskRequest $request): \Illuminate\Http\RedirectResponse
+    public function store(TaskRequest $request): RedirectResponse
     {
-        (new Task([
+        $task = (new Task([
             'title' => $request->get('title'),
             'description' => $request->get('description'),
-        ]))->save();
+        ]));
+
+        $task->user()->associate(auth()->user());
+        $task->save();
         return redirect()->route('tasks.index');
     }
 
-    public function edit(Task $task)
+    public function edit(Task $task) //Task::findOrFail()
     {
         return view('tasks.edit', ['task' => $task]);
     }
 
-    public function update(TaskRequest $request, Task $task): \Illuminate\Http\RedirectResponse
+    public function update(TaskRequest $request, Task $task): RedirectResponse
     {
         $task->update([
             'title' => $request->get('title'),
@@ -41,12 +48,19 @@ class TasksController extends Controller
         return redirect()->route('tasks.edit', $task);
     }
 
-    public function destroy(Task $task): \Illuminate\Http\RedirectResponse
+    public function destroy(Task $task): RedirectResponse
     {
         $task->delete();
 
         return redirect()->route('tasks.index');
     }
 
+    public function complete(Task $task): RedirectResponse
+    {
+        $task->update([
+            'completed_at' => now()
+        ]);
+        return redirect()->back();
+    }
 
 }

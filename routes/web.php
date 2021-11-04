@@ -17,10 +17,9 @@ Route::get('/dashboard', function () {
 Route::resource('/tasks', TasksController::class);
 
 
+Route::post('/tasks/{id}/complete', [TasksController::class, 'complete'])
+    ->middleware('auth')
+    ->name('tasks.complete');
 
 
-
-
-
-
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
