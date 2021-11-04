@@ -9,7 +9,7 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <a class="p-6 bg-white border-b border-gray-200">
-                        <div class="flex mt-4" style="margin: 0 auto; width: 50%">
+                        <div class="flex mt-4" style="margin: 0 auto; width: 50%; padding-left: 12em">
                             <a href="{{route('tasks.create')}}">
                             <button class="flex-no-shrink p-2 border-2 rounded text-teal border-teal hover:text-white hover:bg-teal">Add New TODO</button>
                         </a>
@@ -17,19 +17,18 @@
                     @foreach($task as $task)
                         <ul>
                             <li>
-                                <h5 style="font-weight: bold">{{$task->title}}</h5>
-                                <p>{{$task->description}}</p>
+                                <h5 style="font-weight: bold" class="{{$task->completed_at ? 'strike-off' : ''}}">
+                                    {{$task->title}}</h5>
+
+                                <p class="{{$task->completed_at ? 'strike-off' : ''}}">
+                                    {{$task->description}}</p>
                                 <p>
                                     <button class="flex-no-shrink p-2 border-2 rounded text-teal border-teal hover:text-white hover:bg-teal">
-                                        <a href="{{route('tasks.edit',$task)}}">EDIT</a></button>
-
+                                        <a style="font-weight: bolder" href="{{route('tasks.edit',$task)}}">EDIT</a></button>
                                     <form method="post" action="{{route('tasks.destroy', $task)}}">
                                     @csrf
                                     @method('DELETE')
 
-                                    @if(route('tasks.destroy', $task) !== null)
-                                        <del>{{$task->title}}</del>
-                                    @endif
                                     <div>
                                         <div class="flex mb-4 items-center">
                                             <p class="line-through w-full text-white">
@@ -57,12 +56,17 @@
                                         </div>
                                     </div>
                                 </form>
-                                </p>
+                                @if ($task->completed_at===null)
+                                <form method="post" action="{{route('task.complete', $task)}}">
+
+                                    @csrf
+
+                                    <button class="flex-no-shrink p-2 border-2 rounded text-teal border-teal hover:text-white hover:bg-teal">Mark as complete</button>
+                                </form>
+                                    @endif
                             </li>
                         </ul>
                     @endforeach
-
-
                 </div>
             </div>
         </div>

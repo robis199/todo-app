@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\Task;
 use App\Models\User;
+use Illuminate\Auth\Authenticatable;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -42,7 +43,7 @@ class TasksControllerTest extends TestCase
 
         $task->save();
 
-        $this->assertEquals($task,$task->save());
+        $this->assertEquals($task, $task->save());
     }
 
     public function test_edit_view(): void
@@ -59,6 +60,7 @@ class TasksControllerTest extends TestCase
 
     public function test_update(): void
     {
+        $this->actingAs((User::factory()->create()));
 
         $this->actingAs((Task::factory()->update()));
 
@@ -66,12 +68,14 @@ class TasksControllerTest extends TestCase
 
         $task->update();
 
-        $this->assertEquals($task,$task->update());
+        $this->assertEquals($task, $task->update());
     }
 
 
     public function test_delete(): void
     {
+
+        $this->actingAs((User::factory()->make()));
 
         $this->actingAs((Task::factory()->delete()));
 
@@ -82,7 +86,23 @@ class TasksControllerTest extends TestCase
         $this->assertEquals($task->delete());
     }
 
+    public function test_task_complete(): void
+    {
+        $this->actingAs(User::factory()->make());
 
+        $task = Task::factory()->create([
+            'completed_at' =>now()
+        ]);
 
+        $this->followingRedirects();
+
+        $response = $this->post(route('tasks.complete', $task));
+
+        $response->assertStatus(200);
+        $this->assertDatabaseHas('tasks', [
+            'id' => $task->id,
+            'completed_at' => now()
+        ]);
+    }
 
 }

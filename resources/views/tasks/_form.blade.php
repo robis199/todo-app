@@ -13,9 +13,7 @@
                     @error('title')
                     <p>{{$message}}</p>
                     @enderror
-
                 </label>
-
 
                 <label for="description">
                     <input name="description"
@@ -45,7 +43,7 @@
     </div>
 </div>
 
-{{--        <!-- Completed -->
+{{--
     </div>
     <div class="w-full bg-gray-800 flex items-center justify-center font-sans md:max-w-2xl">
         <div
@@ -54,11 +52,11 @@
             <div class="mb-4">
                 <h1 class="text-white">Completed</h1>
                 <div class="flex mt-4 text-white">
-                    Completed todo here ...
+
                 </div>
             </div>
         </div>
     </div>
-    <!-- End of file -->
+
 </div>
 </form>--}}

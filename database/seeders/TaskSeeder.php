@@ -18,8 +18,7 @@ class TaskSeeder extends Seeder
         ]);
 
         Task::factory()
-            ->count(5)
-            ->create();
+           ->create();
 
     }
 }

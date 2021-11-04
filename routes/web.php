@@ -17,6 +17,9 @@ Route::get('/dashboard', function () {
 Route::resource('/tasks', TasksController::class);
 
 
+Route::post('/tasks/', TasksController::class);
+
+
 
 
 

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\TaskRequest;
 use App\Models\Task;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
 class TasksController extends Controller
@@ -18,7 +19,7 @@ class TasksController extends Controller
         return view('tasks.create');
     }
 
-    public function store(TaskRequest $request): \Illuminate\Http\RedirectResponse
+    public function store(TaskRequest $request): RedirectResponse
     {
         (new Task([
             'title' => $request->get('title'),
@@ -27,12 +28,12 @@ class TasksController extends Controller
         return redirect()->route('tasks.index');
     }
 
-    public function edit(Task $task)
+    public function edit(Task $task) //Task::findOrFail()
     {
         return view('tasks.edit', ['task' => $task]);
     }
 
-    public function update(TaskRequest $request, Task $task): \Illuminate\Http\RedirectResponse
+    public function update(TaskRequest $request, Task $task): RedirectResponse
     {
         $task->update([
             'title' => $request->get('title'),
@@ -41,19 +42,19 @@ class TasksController extends Controller
         return redirect()->route('tasks.edit', $task);
     }
 
-    public function destroy(Task $task): \Illuminate\Http\RedirectResponse
+    public function destroy(Task $task): RedirectResponse
     {
         $task->delete();
 
         return redirect()->route('tasks.index');
     }
 
-    public function complete(Task $task)
+    public function complete(Task $task): RedirectResponse
     {
-
-        return redirect()->back(route('tasks.index'));
+        $task->update([
+            'completed_at' => now()
+        ]);
+        return redirect()->back();
     }
-
-
 
 }
