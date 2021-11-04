@@ -5,13 +5,16 @@ namespace App\Http\Controllers;
 use App\Http\Requests\TaskRequest;
 use App\Models\Task;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 
 class TasksController extends Controller
 {
     public function index()
     {
-        return view('tasks.index', ['task' => Task::all()]);
+        $tasks = Task::where('user_id', auth()->user()->id)
+            ->orderBy('id', 'ASC')
+            ->tasks()
+            ->get();
+        return view('tasks.index', ['tasks' => $tasks]);
     }
 
     public function create()
@@ -21,10 +24,13 @@ class TasksController extends Controller
 
     public function store(TaskRequest $request): RedirectResponse
     {
-        (new Task([
+        $task = (new Task([
             'title' => $request->get('title'),
             'description' => $request->get('description'),
-        ]))->save();
+        ]));
+
+        $task->user()->associate(auth()->user());
+        $task->save();
         return redirect()->route('tasks.index');
     }
 

@@ -65,6 +65,7 @@
                                 </form>
                                     @endif
                             </li>
+                            <li>{{$task->completed_at}}</li>
                         </ul>
                     @endforeach
                 </div>

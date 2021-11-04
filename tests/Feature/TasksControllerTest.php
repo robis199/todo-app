@@ -88,9 +88,11 @@ class TasksControllerTest extends TestCase
 
     public function test_task_complete(): void
     {
-        $this->actingAs(User::factory()->make());
+        $this->actingAs(User::factory()->create());
+        $user = new User();
 
         $task = Task::factory()->create([
+            'user_id' => $user->id,
             'completed_at' =>now()
         ]);
 

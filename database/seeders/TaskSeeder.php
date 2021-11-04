@@ -17,7 +17,7 @@ class TaskSeeder extends Seeder
             'description' => Str::random(110)
         ]);
 
-        Task::factory()
+        Task::factory(5 )
            ->create();
 
     }
