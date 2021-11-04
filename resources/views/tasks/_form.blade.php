@@ -26,6 +26,17 @@
                     @enderror
                 </label>
 
+                <label for="title">
+                    <input name="title"
+                           class="border border-gray-800 focus:border-blue-500 rounded w-full py-2 px-3 mr-4 text-black"
+                           placeholder="Add Title"
+                           v-model="msg"
+                           value="{{old("completed_at", $task->completed_at ?? "")}}"
+                    @error('completed_at')
+                    <p>{{$message}}</p>
+                    @enderror
+                </label>
+
                 <button
                     class="p-0 w-12 h-10 bg-gray-500 rounded-full hover:bg-gray-400 active:shadow-lg mouse shadow transition ease-in duration-200 focus:outline-none">
                     {{$task===null ? 'Add': 'Save'}}

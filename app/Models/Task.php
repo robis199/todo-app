@@ -20,6 +20,8 @@ class Task extends Model
       'completed_at'=> 'datetime'
     ];
 
+
+
     public function user()
     {
         return $this->belongsTo(User::class);

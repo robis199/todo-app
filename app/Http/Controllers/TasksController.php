@@ -63,4 +63,15 @@ class TasksController extends Controller
         return redirect()->back();
     }
 
+    public function checkedOut(TaskRequest $request): RedirectResponse
+    {
+        $task= Task::find()->get(['id']);
+        $request['checkedOut'] = isset($request['checkedOut']) ? 1 : 0;
+        $request->flashOnly(['0']);
+        $task->update();
+
+
+        return redirect('tasks.index')->withInput();
+    }
+
 }

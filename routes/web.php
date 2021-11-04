@@ -21,5 +21,9 @@ Route::post('/tasks/{id}/complete', [TasksController::class, 'complete'])
     ->middleware('auth')
     ->name('tasks.complete');
 
+Route::get('/tasks/checked', [TasksController::class, 'checkedOut'])
+    ->middleware('auth')
+    ->name('tasks.checkedOut');
+
 
 require __DIR__ . '/auth.php';

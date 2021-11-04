@@ -17,11 +17,31 @@
                     @foreach($task as $task)
                         <ul>
                             <li>
-                                <h5 style="font-weight: bold" class="{{$task->completed_at ? 'strike-off' : ''}}">
-                                    {{$task->title}}</h5>
+                                <form method="POST" action="">
+                                <label class="custom-label flex mt-2 ml-3">
+                                    <div class="bg-white shadow w-6 h-6 p-1 flex justify-center items-center mr-2">
+                                        <input type="checkbox" name="checkedOut[]" class="hidden" value = "0" @if(request()->checkedOut) checked @endif>
+                                        <svg class="hidden w-4 h-4 text-green-600 pointer-events-none" viewBox="0 0 172 172"><g fill="none" stroke-width="none" stroke-miterlimit="10" font-family="none" font-weight="none" font-size="none" text-anchor="none" style="mix-blend-mode:normal"><path d="M0 172V0h172v172z"/><path d="M145.433 37.933L64.5 118.8658 33.7337 88.0996l-10.134 10.1341L64.5 139.1341l91.067-91.067z" fill="currentColor" stroke-width="1"/></g></svg>
+                                    </div>
+                                    <span style="font-weight: bold" class="{{$task->completed_at ? 'strike-off' : ''}}">
+                                        {{$task->title}}</span>
+                                    @includeWhen($request['checkedOut']===1)
+                                </label>
+                                </form>
+                                <form method="POST" action="">
+                                <label class="custom-label flex mt-2 ml-3">
+                                    <div class="bg-white shadow w-6 h-6 p-1 flex justify-center items-center mr-2">
+                                        <input type="checkbox" name = "checkedOut[]" class="hidden" value = "0" @if(request()->checkedOut) checked @endif>
+                                        <svg class="hidden w-4 h-4 text-green-600 pointer-events-none" viewBox="0 0 172 172"><g fill="none" stroke-width="none" stroke-miterlimit="10" font-family="none" font-weight="none" font-size="none" text-anchor="none" style="mix-blend-mode:normal"><path d="M0 172V0h172v172z"/><path d="M145.433 37.933L64.5 118.8658 33.7337 88.0996l-10.134 10.1341L64.5 139.1341l91.067-91.067z" fill="currentColor" stroke-width="1"/></g></svg>
+                                    </div>
+                                    <span class="{{$task->completed_at ? 'strike-off' : ''}}">
+                                        {{$task->description}}</span>
+                                    <form method="POST" action="">
+                                    @includeWhen($request['checkedOut']===1)
+                                </label>
+                                </form>
 
-                                <p class="{{$task->completed_at ? 'strike-off' : ''}}">
-                                    {{$task->description}}</p>
+
                                 <p>
                                     <button class="flex-no-shrink p-2 border-2 rounded text-teal border-teal hover:text-white hover:bg-teal">
                                         <a style="font-weight: bolder" href="{{route('tasks.edit',$task)}}">EDIT</a></button>
