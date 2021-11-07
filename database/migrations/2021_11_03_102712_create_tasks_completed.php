@@ -22,7 +22,9 @@ class CreateTasksCompleted extends Migration
     public function down(): void
     {
         Schema::table('tasks', function (Blueprint $table) {
-            $table->dropColumn('completed_at');
+            $table->dropColumn([
+                'completed_at'
+            ]);
         });
     }
 }

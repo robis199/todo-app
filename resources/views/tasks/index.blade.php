@@ -14,26 +14,30 @@
                             <button class="flex-no-shrink p-2 border-2 rounded text-teal border-teal hover:text-white hover:bg-teal">Add New TODO</button>
                         </a>
                         </div>
-                    @foreach($task as $task)
+                    @foreach($tasks as $task)
                         <ul>
+                            <div class="border-indigo-900 grid-flow-col-dense" style=" width: 50%; margin: 0 auto">
                             <li>
-                                <h5 style="font-weight: bold" class="{{$task->completed_at ? 'strike-off' : ''}}">
-                                    {{$task->title}}</h5>
-
-                                <p class="{{$task->completed_at ? 'strike-off' : ''}}">
-                                    {{$task->description}}</p>
+                                <div class="grid">
+                                <form method="post" action="{{ route('tasks.complete', $task) }}">
+                                    @csrf
+                                    @method('PUT')
+                                    <input type="checkbox" name="checked" value="{{ !$task->completed_at ? now() : null }}"
+                                           onchange="this.form.submit()">
+                                </form>
+                                @if(isset($task->completed_at)) <s>{{ $task->title }} {{ $task->description }} {{ $task->completed_at }}</s> @endif
+                                    <p>
+                                        <a href="{{ route('tasks.create', $task) }}">{{ $task->title }} {{ $task->description }} {{ $task->completed_at }}</a>
+                                    </p>
                                 <p>
-                                    <button class="flex-no-shrink p-2 border-2 rounded text-teal border-teal hover:text-white hover:bg-teal">
+                                    <button class="flex p-2 border-2 rounded text-teal border-teal hover:text-white hover:bg-teal">
                                         <a style="font-weight: bolder" href="{{route('tasks.edit',$task)}}">EDIT</a></button>
                                     <form method="post" action="{{route('tasks.destroy', $task)}}">
                                     @csrf
                                     @method('DELETE')
-
+                                </div>
                                     <div>
-                                        <div class="flex mb-4 items-center">
-                                            <p class="line-through w-full text-white">
-                                                Todo list 1
-                                            </p>
+                                        <div class="mx-24 text-justify px-6 inline-table;">
                                             <button
                                                 class="uppercase p-3 flex items-center bg-gray-500 hover:bg-gray-400 text-blue-50 max-w-max shadow-sm hover:shadow-lg rounded-full w-10 h-10 "
                                             >
@@ -56,16 +60,8 @@
                                         </div>
                                     </div>
                                 </form>
-                                @if ($task->completed_at===null)
-                                <form method="post" action="{{route('task.complete', $task)}}">
-
-                                    @csrf
-
-                                    <button class="flex-no-shrink p-2 border-2 rounded text-teal border-teal hover:text-white hover:bg-teal">Mark as complete</button>
-                                </form>
-                                    @endif
                             </li>
-                            <li>{{$task->completed_at}}</li>
+                            </div>
                         </ul>
                     @endforeach
                 </div>

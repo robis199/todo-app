@@ -4,7 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\Task;
 use App\Models\User;
-use Illuminate\Auth\Authenticatable;
+use Database\Factories\TaskFactory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -12,15 +12,15 @@ class TasksControllerTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_home(): void
+    public function test_main_page(): void
     {
 
-        $this->actingAs((User::factory()->create()));
+        $this->actingAs(User::factory()->create());
 
-        $response = $this->get('/tasks');
+        $response = $this->get(route('tasks.index'));
 
         $response->assertStatus(200);
-        $response->assertViewIs('/tasks');
+        $response->assertViewIs('tasks.index');
     }
 
     public function test_create_view(): void
@@ -34,27 +34,44 @@ class TasksControllerTest extends TestCase
         $response->assertViewIs('tasks.create');
     }
 
-    public function test_store(): void
+    public function test_store_a_new_task(): void
     {
 
-        $this->actingAs((Task::factory()->create()));
+        $user = User::factory()->create();
+        $this->actingAs($user);
 
-        $task = new Task;
+        $this->followingRedirects();
 
-        $task->save();
+        $response = $this->post(route('tasks.store'), [
+            'user_id' => $user->id,
+            'title' => 'title',
+            'description' => 'description'
+        ]);
 
-        $this->assertEquals($task, $task->save());
+        $this->assertDatabaseHas('tasks', [
+            'user_id' => $user->id,
+            'title' => 'title',
+            'description' => 'description'
+        ]);
+        $response->assertStatus(200);
+
     }
 
     public function test_edit_view(): void
     {
 
-        $this->actingAs((User::factory()->create()));
+        $user = User::factory()->create();
+        $this->actingAs($user);
 
-        $response = $this->get(route('tasks.edit'));
+        $task = Task::factory()->create([
+            'user_id' => $user->id
+        ]);
+
+        $response = $this->get(route('tasks.edit', $task));
 
         $response->assertStatus(200);
         $response->assertViewIs('tasks.edit');
+
     }
 
 
@@ -62,49 +79,66 @@ class TasksControllerTest extends TestCase
     {
         $this->actingAs((User::factory()->create()));
 
-        $this->actingAs((Task::factory()->update()));
+        $task = Task::factory()->create([
+            'user_id' => $user->id
+        ]);
 
-        $task = new Task;
+        $this->followingRedirects();
+        $response = $this->put(route('tasks.update', $task), [
+            'title' => 'sgjdspgkpodspo',
+            'description' => 'sdfsdofjdsof'
+        ]);
 
-        $task->update();
-
-        $this->assertEquals($task, $task->update());
+        $this->assertDatabaseHas('tasks', [
+            'user_id' => $user->id,
+            'title' => 'string',
+            'description' => 'dhdghdffd'
+        ]);
+        $response->assertStatus(200);
     }
 
 
     public function test_delete(): void
     {
 
-        $this->actingAs((User::factory()->make()));
+        $user = User::factory()->create();
+        $this->actingAs($user);
 
-        $this->actingAs((Task::factory()->delete()));
+        $task = Task::factory()->create([
+            'user_id' => $user->id
+        ]);
 
-        $task = new Task;
+        $this->followingRedirects();
+        $response = $this->delete(route('tasks.destroy', $task));
 
-        $task->delete();
-
-        $this->assertEquals($task->delete());
+        $this->assertDatabaseMissing('tasks', [
+            'id' => $task->id
+        ]);
+        $response->assertStatus(200);
     }
 
     public function test_task_complete(): void
     {
-        $this->actingAs(User::factory()->create());
-        $user = new User();
+        $user = User::factory()->create();
+        $this->actingAs($user);
 
         $task = Task::factory()->create([
             'user_id' => $user->id,
-            'completed_at' =>now()
+            'completed_at' => now(),
         ]);
 
         $this->followingRedirects();
 
-        $response = $this->post(route('tasks.complete', $task));
+        $response = $this->put(route('tasks.complete', $task),  ['complete' => now()]);
 
-        $response->assertStatus(200);
+
         $this->assertDatabaseHas('tasks', [
             'id' => $task->id,
+            'user_id' => $user->id,
             'completed_at' => now()
         ]);
+
+             $response->assertStatus(200);
     }
 
 }
