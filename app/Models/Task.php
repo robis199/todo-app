@@ -9,7 +9,6 @@ class Task extends Model
 {
     use HasFactory;
 
-
     protected $fillable = [
         'title',
         'description',
@@ -19,8 +18,6 @@ class Task extends Model
     protected $casts = [
       'completed_at'=> 'datetime'
     ];
-
-
 
     public function user()
     {

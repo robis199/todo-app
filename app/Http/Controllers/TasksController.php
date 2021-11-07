@@ -10,11 +10,10 @@ class TasksController extends Controller
 {
     public function index()
     {
-        $tasks = Task::where('user_id', auth()->user()->id)
-            ->orderBy('id', 'ASC')
-            ->tasks()
-            ->get();
-        return view('tasks.index', ['tasks' => $tasks]);
+        $tasks = auth()->user()->tasks()->get();
+
+        return view('tasks.index',
+            ['tasks' => $tasks]);
     }
 
     public function create()
@@ -24,6 +23,11 @@ class TasksController extends Controller
 
     public function store(TaskRequest $request): RedirectResponse
     {
+        $request->validate([
+            'title' => 'required',
+            'description' => 'required'
+        ]);
+
         $task = (new Task([
             'title' => $request->get('title'),
             'description' => $request->get('description'),
@@ -31,10 +35,11 @@ class TasksController extends Controller
 
         $task->user()->associate(auth()->user());
         $task->save();
+
         return redirect()->route('tasks.index');
     }
 
-    public function edit(Task $task) //Task::findOrFail()
+    public function edit(Task $task)
     {
         return view('tasks.edit', ['task' => $task]);
     }
@@ -55,23 +60,13 @@ class TasksController extends Controller
         return redirect()->route('tasks.index');
     }
 
-    public function complete(Task $task): RedirectResponse
+    public function checkedOut(TaskRequest $request, Task $task): RedirectResponse
     {
         $task->update([
-            'completed_at' => now()
+            'completed_at' => $request->get('checked')
         ]);
+
         return redirect()->back();
-    }
-
-    public function checkedOut(TaskRequest $request): RedirectResponse
-    {
-        $task= Task::find()->get(['id']);
-        $request['checkedOut'] = isset($request['checkedOut']) ? 1 : 0;
-        $request->flashOnly(['0']);
-        $task->update();
-
-
-        return redirect('tasks.index')->withInput();
     }
 
 }

@@ -2,8 +2,6 @@
 
 namespace Database\Factories;
 
-use App\Models\Task;
-use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class TaskFactory extends Factory
@@ -11,12 +9,12 @@ class TaskFactory extends Factory
     public function definition(): array
     {
         return [
-            'user_id' => User::factory()->state([]),
+            'user_id' => null,
             'title' => $this->faker->text(20),
-            'description' => $this->faker->paragraph(255),
-            'completed_at' => null
+            'description' => $this->faker->text(25),
+            'completed_at' => null,
+            'created_at' => $this->faker->date,
+            'updated_at' => $this->faker->date,
         ];
     }
-
-    protected $model = Task::class;
 }

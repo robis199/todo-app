@@ -14,16 +14,12 @@ Route::get('/dashboard', function () {
 })->middleware(['auth'])->name('dashboard');
 
 //task-crud-view
-Route::resource('/tasks', TasksController::class);
+Route::resource('tasks', TasksController::class)
+    ->middleware(['auth']);
+// mark as completed
+Route::put('/tasks/{task}/complete', [TasksController::class, 'checkedOut'])
+    ->middleware(['auth'])->name('tasks.complete');
 
-
-Route::post('/tasks/{id}/complete', [TasksController::class, 'complete'])
-    ->middleware('auth')
-    ->name('tasks.complete');
-
-Route::get('/tasks/checked', [TasksController::class, 'checkedOut'])
-    ->middleware('auth')
-    ->name('tasks.checkedOut');
 
 
 require __DIR__ . '/auth.php';
