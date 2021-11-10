@@ -10,7 +10,11 @@ class TasksController extends Controller
 {
     public function index()
     {
-        $tasks = auth()->user()->tasks()->get();
+        $tasks = auth()
+            ->user()
+            ->tasks()
+            ->orderBy('completed_at', 'ASC')
+            ->paginate(7);
 
         return view('tasks.index',
             ['tasks' => $tasks]);
@@ -60,11 +64,35 @@ class TasksController extends Controller
         return redirect()->route('tasks.index');
     }
 
+
+
     public function checkedOut(TaskRequest $request, Task $task): RedirectResponse
     {
         $task->update([
             'completed_at' => $request->get('checked')
         ]);
+
+        return redirect()->route('tasks.index');
+
+        }
+
+        public function recycleBin() {
+
+        $tasks = auth()->user()->tasks()->onlyTrashed()->get();
+
+        return view('tasks.recycle', ['tasks' => $tasks]);
+    }
+
+    public function show(Task $task)
+    {
+        return view('tasks.recycle')->with(['task' => $task]);
+    }
+
+    public function forceDelete(int $id): RedirectResponse
+    {
+
+        $task = Task::withTrashed()->findOrFail($id);
+        $task->forceDelete();
 
         return redirect()->back();
     }

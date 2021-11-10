@@ -9,6 +9,11 @@
                     {{ __('BACK TO TASKS') }}
                 </x-nav-link>
             </div>
+                <div class="hidden space-x-8 sm:-my-px sm:ml-5 sm:flex">
+                    <x-nav-link :href="route('tasks.recycle')" :active="request()->routeIs('tasks.recycle')">
+                        {{ __('RECYCLE BIN') }}
+                    </x-nav-link>
+                </div>
         </div>
             <!-- Settings Dropdown -->
             <div class="hidden sm:flex sm:items-center sm:ml-6">

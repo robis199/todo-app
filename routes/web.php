@@ -19,6 +19,12 @@ Route::resource('tasks', TasksController::class)
 // mark as completed
 Route::put('/tasks/{task}/complete', [TasksController::class, 'checkedOut'])
     ->middleware(['auth'])->name('tasks.complete');
+//soft
+Route::get('/tasks/recycle', [TasksController::class, 'recycleBin'])
+    ->middleware(['auth'])->name('tasks.recycle');
+//hard
+Route::delete('/tasks/{id}/forceDestroy', [TasksController::class, 'forceDelete'])
+    ->middleware(['auth'])->name('tasks.forceDestroy');
 
 
 
