@@ -8,7 +8,7 @@
                 <a class="p-6 bg-white border-b border-gray-200">
                         <div class="flex mt-4" style="margin: 0 auto; width: 50%; padding-left: 12em">
                             <a href="{{route('tasks.create')}}">
-                            <button class="flex-no-shrink p-2 border-2 rounded text-teal border-teal hover:text-white hover:bg-teal">Add New TODO</button>
+                            <button class="flex-shrink p-2 border-2 rounded text-teal border-teal hover:text-white hover:bg-teal">Add New TODO</button>
                         </a>
                         </div>
                     @foreach($tasks as $task)
@@ -19,13 +19,16 @@
                                 <form method="post" action="{{ route('tasks.complete', $task) }}">
                                     @csrf
                                     @method('PUT')
-                                    <input type="checkbox" name="checked" onchange="this.form.submit()">
+                                    <label for="checked">
+                                        <input type="checkbox" name="checked" onchange="this.form.submit()">
+                                    </label>
                                 </form>
                                 @if($task->completed_at) <s> @endif
                                     <p>
-                                        <a href="{{ route('tasks.index', $task) }}">{{ $task->title }}<br>{{$task->description}}</a>
+                                        <a href="{{ route('tasks.index', $task) }}"><b>{{ $task->title }}</b><br>{{$task->description}}</a>
                                     </p>
                                         @if($task->completed_at) </s> @endif
+
                                     <button class="flex p-2 border-2 rounded text-teal border-teal hover:text-white hover:bg-teal">
                                         <a style="font-weight: bolder" href="{{route('tasks.edit',$task)}}">EDIT</a></button>
                                     <form method="post" action="{{route('tasks.destroy', $task)}}">
