@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Jobs\CounterJob;
 use App\Models\User;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Auth\Events\Registered;
@@ -10,6 +11,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
+use PHPUnit\Framework\Constraint\Count;
+use SebastianBergmann\LinesOfCode\Counter;
 
 class RegisteredUserController extends Controller
 {
@@ -48,6 +51,8 @@ class RegisteredUserController extends Controller
         event(new Registered($user));
 
         Auth::login($user);
+
+        dispatch(new CounterJob(10));
 
         return redirect(RouteServiceProvider::HOME);
     }

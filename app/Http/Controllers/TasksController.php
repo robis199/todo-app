@@ -10,14 +10,8 @@ class TasksController extends Controller
 {
     public function index()
     {
-        $tasks = auth()
-            ->user()
-            ->tasks()
-            ->orderBy('completed_at', 'ASC')
-            ->paginate(7);
-
         return view('tasks.index',
-            ['tasks' => $tasks]);
+            ['tasks' => Task::all()]);
     }
 
     public function create()
@@ -27,10 +21,6 @@ class TasksController extends Controller
 
     public function store(TaskRequest $request): RedirectResponse
     {
-        $request->validate([
-            'title' => 'required',
-            'description' => 'required'
-        ]);
 
         $task = (new Task([
             'title' => $request->get('title'),
@@ -40,7 +30,7 @@ class TasksController extends Controller
         $task->user()->associate(auth()->user());
         $task->save();
 
-        return redirect()->route('tasks.index');
+        return redirect('tasks.index')->with('Success', 'Task added!');
     }
 
     public function edit(Task $task)
@@ -74,14 +64,15 @@ class TasksController extends Controller
 
         return redirect()->route('tasks.index');
 
-        }
+    }
 
-        public function recycleBin() {
+        public function recycleBin()
+        {
 
         $tasks = auth()->user()->tasks()->onlyTrashed()->get();
 
         return view('tasks.recycle', ['tasks' => $tasks]);
-    }
+        }
 
     public function show(Task $task)
     {

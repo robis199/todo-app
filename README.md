@@ -1,6 +1,6 @@
 # this is a basic todo crud app
 
-The project runs with Laravel version 8 and php (>= 7.0.0)
+The project runs with Laravel version 8, Composer, Node.js. and PHP (>= 7.0.0)
 
 
 # authentication by Breeze
